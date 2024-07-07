@@ -2,150 +2,150 @@
 <html lang="zh-TW">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sparkle 花火伺服器 - 在線狀態</title>
-  <link rel="icon" href="icon.png" type="image/png" />
-  <meta name="description" content="查看 SPKsmp 伺服器的當前狀態，包括生存服和創造服的在線狀態和版本信息。" />
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Sparkle 花火伺服器 - 在線狀態</title>
+	<link rel="icon" href="icon.png" type="image/png" />
+	<meta name="description" content="查看 SPKsmp 伺服器的當前狀態，包括生存服和創造服的在線狀態和版本信息。" />
+	<link rel="stylesheet" href="styles.css" />
+	<style>
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
 
-      to {
-        opacity: 1;
-      }
-    }
+			to {
+				opacity: 1;
+			}
+		}
 
-    .server-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
+		.server-container {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
 
-    .server-box {
-      background-color: rgba(52, 55, 82, 0.6);
-      padding: 15px;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
+		.server-box {
+			background-color: rgba(52, 55, 82, 0.6);
+			padding: 15px;
+			border-radius: 15px;
+			backdrop-filter: blur(10px);
+			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			animation: fadeIn 1s ease-in-out;
+		}
 
-    .server-box h2 {
-      color: #82aaff;
-      margin-top: 0;
-      padding-bottom: 10px;
-      text-transform: uppercase;
-      font-size: 1.5em;
-      border-bottom: 2px solid #3d5afe;
-    }
+		.server-box h2 {
+			color: #82aaff;
+			margin-top: 0;
+			padding-bottom: 10px;
+			text-transform: uppercase;
+			font-size: 1.5em;
+			border-bottom: 2px solid #3d5afe;
+		}
 
-    .version-boxes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+		.version-boxes {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+			margin-bottom: 15px;
+		}
 
-    .version-box {
-      background-color: rgba(62, 65, 96, 0.6);
-      padding: 10px;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
+		.version-box {
+			background-color: rgba(62, 65, 96, 0.6);
+			padding: 10px;
+			border-radius: 15px;
+			backdrop-filter: blur(10px);
+			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			animation: fadeIn 1s ease-in-out;
+		}
 
-    .version-box h3 {
-      margin: 0 0 10px 0;
-      font-size: 1.2em;
-    }
+		.version-box h3 {
+			margin: 0 0 10px 0;
+			font-size: 1.2em;
+		}
 
-    .status-item {
-      margin-bottom: 5px;
-      font-size: 1em;
-    }
+		.status-item {
+			margin-bottom: 5px;
+			font-size: 1em;
+		}
 
-    .status-item span {
-      font-weight: bold;
-      color: #a2d2ff;
-    }
-  </style>
+		.status-item span {
+			font-weight: bold;
+			color: #a2d2ff;
+		}
+	</style>
 
-  <script src="js/bg.js"></script>
-  <script src="js/nav.js"></script>
+	<script src="js/bg.js"></script>
+	<script src="js/nav.js"></script>
 </head>
 
 <body>
-  <div class="background-overlay"></div>
-  <div class="container">
-    <div id="nav-placeholder"></div>
-    <h1>Server Status</h1>
-    <div class="content">
-      <div class="server-container">
-        <div class="server-box">
-          <h2>生存服</h2>
-          <div class="version-boxes">
-            <div class="version-box">
-              <h3>Java 版</h3>
-              <div class="status-item">
-                狀態: <span id="java-status">載入中...</span>
-              </div>
-              <div class="status-item">
-                版本: <span id="java-version">載入中...</span>
-              </div>
-            </div>
-            <div class="version-box">
-              <h3>BE 版</h3>
-              <div class="status-item">
-                狀態: <span id="be-status">載入中...</span>
-              </div>
-              <div class="status-item">
-                版本: <span id="be-version">載入中...</span>
-              </div>
-            </div>
-          </div>
-          <div class="status-item">
-            玩家: <span id="players">載入中...</span>
-          </div>
-        </div>
-        <div class="server-box" id="creative-server">
-          <h2>創造服</h2>
-          <div class="version-boxes">
-            <div class="version-box">
-              <h3>Java 版</h3>
-              <div class="status-item">
-                狀態: <span id="creative-java-status">載入中...</span>
-              </div>
-              <div class="status-item">
-                版本: <span id="creative-java-version">載入中...</span>
-              </div>
-            </div>
-            <div class="version-box">
-              <h3>BE 版</h3>
-              <div class="status-item">
-                狀態: <span id="creative-be-status">載入中...</span>
-              </div>
-              <div class="status-item">
-                版本: <span id="creative-be-version">載入中...</span>
-              </div>
-            </div>
-          </div>
-          <div class="status-item">
-            玩家: <span id="creative-players">載入中...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="background-overlay"></div>
+	<div class="container">
+		<div id="nav-placeholder"></div>
+		<h1>Server Status</h1>
+		<div class="content">
+			<div class="server-container">
+				<div class="server-box">
+					<h2>生存服</h2>
+					<div class="version-boxes">
+						<div class="version-box">
+							<h3>Java 版</h3>
+							<div class="status-item">
+								狀態: <span id="java-status">載入中...</span>
+							</div>
+							<div class="status-item">
+								版本: <span id="java-version">載入中...</span>
+							</div>
+						</div>
+						<div class="version-box">
+							<h3>BE 版</h3>
+							<div class="status-item">
+								狀態: <span id="be-status">載入中...</span>
+							</div>
+							<div class="status-item">
+								版本: <span id="be-version">載入中...</span>
+							</div>
+						</div>
+					</div>
+					<div class="status-item">
+						玩家: <span id="players">載入中...</span>
+					</div>
+				</div>
+				<div class="server-box" id="creative-server">
+					<h2>創造服</h2>
+					<div class="version-boxes">
+						<div class="version-box">
+							<h3>Java 版</h3>
+							<div class="status-item">
+								狀態: <span id="creative-java-status">載入中...</span>
+							</div>
+							<div class="status-item">
+								版本: <span id="creative-java-version">載入中...</span>
+							</div>
+						</div>
+						<div class="version-box">
+							<h3>BE 版</h3>
+							<div class="status-item">
+								狀態: <span id="creative-be-status">載入中...</span>
+							</div>
+							<div class="status-item">
+								版本: <span id="creative-be-version">載入中...</span>
+							</div>
+						</div>
+					</div>
+					<div class="status-item">
+						玩家: <span id="creative-players">載入中...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 <script src="js/status.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
-  data-cf-beacon='{"token": "53011111e89a404697101886fbee6f66"}'></script>
+	data-cf-beacon='{"token": "53011111e89a404697101886fbee6f66"}'></script>
 <!-- End Cloudflare Web Analytics -->
 
 </html>
