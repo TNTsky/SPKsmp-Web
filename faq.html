@@ -130,28 +130,9 @@
                     <p>您隨時可於伺服器聊天頻道中提出意見，或直接聯繫管理員。</p>
                 </div>
             </div>
-
         </div>
     </div>
-
-    <script>
-        var acc = document.getElementsByClassName("faq-question");
-        var i;
-
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var panel = this.nextElementSibling;
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                    panel.classList.remove("active");
-                } else {
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                    panel.classList.add("active");
-                }
-            });
-        }
-    </script>
+    <script src="js/faq.js"></script>
 </body>
 <!-- Cloudflare Web Analytics -->
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
