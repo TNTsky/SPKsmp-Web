@@ -298,3 +298,61 @@ td {
     word-wrap: break-word;
     white-space: normal;
 }
+
+.faq-category {
+    margin-bottom: 30px;
+}
+
+.faq-question {
+    background-color: rgba(130, 170, 255, 0.2) !important;
+    color: #d0d0d0 !important;
+    cursor: pointer ;
+    padding: 15px !important;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px !important;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    position: relative;
+    margin: 10px 0 !important;
+    font-weight: bold !important;
+}
+
+.faq-question:hover {
+    background-color: rgba(130, 170, 255, 0.3);
+}
+
+.faq-question:after {
+    content: '\002B';
+    color: #d0d0d0;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.faq-question.active:after {
+    content: "\2212";
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0 18px;
+    background-color: rgba(0, 0, 0, 0.2);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    border-radius: 0 0 10px 10px;
+    margin-top: -10px;
+}
+
+.faq-answer.active {
+    padding: 15px 18px;
+}
+
+.faq-answer p {
+    margin: 0;
+    line-height: 1.6;
+}

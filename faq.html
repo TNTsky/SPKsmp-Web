@@ -8,25 +8,155 @@
     <link rel="icon" href="icon.png" type="image/png">
     <meta name="description" content="歡迎來到 SPKsmp！這是一個充滿樂趣和創意的 Minecraft 伺服器。我們提供 Java 版和基岩版（BE）的遊戲體驗，讓不同平台的玩家都能一同遊玩。">
     <link rel="stylesheet" href="styles.css">
-    <script src="js/bg.js" ></script>
-    <script src="js/nav.js" ></script>
+    <script src="js/bg.js"></script>
+    <script src="js/nav.js"></script>
+    <style>
+        .faq-category {
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #82aaff;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            transition: 0.4s;
+            border-radius: 5px;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .faq-answer {
+            padding: 0 18px;
+            background-color: rgba(0, 0, 0, 0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-radius: 0 0 5px 5px;
+        }
+    </style>
 </head>
+
 <body>
     <div class="background-overlay"></div>
     <div class="container">
         <div id="nav-placeholder"></div>
         <div class="content">
-            <h2>常見問題</h2>
-            <h3>問：如何加入伺服器？</h3>
-            <p>答：請參考<a style="color: #00aebd; text-decoration: none;" href="guide.html">入服指南</a>。</p>
-            <h3>問：伺服器有哪些遊戲模式？</h3>
-            <p>答：我們目前有生存服和創造服兩種主要遊戲模式。詳細資訊請參考<a style="color: #00aebd; text-decoration: none;" href="about.html">伺服器介紹</a>。</p>
-            <h3>問：如何贊助伺服器？</h3>
-            <p>答：請參考<a style="color: #00aebd; text-decoration: none;" href="donate.html">贊助者名單</a>。</p>
+            <h1>FAQ</h1>
+
+            <!-- 伺服器基本信息 -->
+            <div class="faq-category">
+                <h2>伺服器基本信息</h2>
+
+                <button class="faq-question">伺服器有哪些遊戲模式？</button>
+                <div class="faq-answer">
+                    <p>我們目前有生存服和創造服兩種主要遊戲模式。</p>
+                </div>
+
+                <button class="faq-question">伺服器是否支援跨平台遊玩？</button>
+                <div class="faq-answer">
+                    <p>是的，我們的伺服器支援 Java 和 Bedrock 版本的跨平台遊玩。</p>
+                </div>
+
+                <button class="faq-question">是否可以合併 JE 和 BE 存檔以便於不同裝置皆可遊玩相同存檔？</button>
+                <div class="faq-answer">
+                    <p>是的，可以透過連結雙版本帳號使不同裝置皆可遊玩相同存檔，詳細方法請至DC群內公告釘選文章查看。</p>
+                </div>
+
+                <button class="faq-question">伺服器的開服時間是什麼時候？</button>
+                <div class="faq-answer">
+                    <p>伺服器是 24/7 全天候開放的。如果有計劃中的維護或停機，我們會提前通知玩家。若遇到崩服或斷線等非玩家因素造成的突發狀況，並造成玩家損失，我們提供相應補償。</p>
+                </div>
+            </div>
+
+            <!-- 模組與插件 -->
+            <div class="faq-category">
+                <h2>模組與插件</h2>
+
+                <button class="faq-question">伺服器是否有加裝任何模組或插件？</button>
+                <div class="faq-answer">
+                    <p>我們有安裝一些利於遊玩的模組，如 Carpet（地毯模組）等不影響遊戲平衡的模組。</p>
+                </div>
+
+                <button class="faq-question">進入伺服器是否需要安裝模組？</button>
+                <div class="faq-answer">
+                    <p>為了使 Bedrock 版本玩家也能正常遊玩，我們不需安裝任何模組即可進入伺服器，但 Java 版本玩家可以安裝客戶端模組以獲得更好的遊戲體驗。</p>
+                </div>
+
+                <button class="faq-question">有哪些輔助模組推薦使用？</button>
+                <div class="faq-answer">
+                    <p>我們有提供推薦的模組整合包可供使用，但請勿使用任何違反伺服器規則的外掛。</p>
+                </div>
+            </div>
+
+            <!-- 贊助與支持 -->
+            <div class="faq-category">
+                <h2>贊助與支持</h2>
+
+                <button class="faq-question">是否有可付費購買之虛擬物品？</button>
+                <div class="faq-answer">
+                    <p>本服為非營利取向，我們不提供任何課金服務，所有架設伺服器相關費用皆由管理員自行付出，若您喜歡本伺服器且有意願贊助，我們將不勝感激。</p>
+                </div>
+
+                <button class="faq-question">贊助可以獲得甚麼好處？</button>
+                <div class="faq-answer">
+                    <p>將不會在伺服器中獲得任何特權，但若您有任何希望事項或是需求，我們將盡力配合。</p>
+                </div>
+            </div>
+
+            <!-- 活動與管理 -->
+            <div class="faq-category">
+                <h2>活動與管理</h2>
+
+                <button class="faq-question">伺服器會不會舉辦活動？</button>
+                <div class="faq-answer">
+                    <p>我們不定期舉辦各種活動，但因人手有限，活動頻率可能較低。</p>
+                </div>
+
+                <button class="faq-question">如果我發現有玩家作弊，我應該怎麼辦？</button>
+                <div class="faq-answer">
+                    <p>請立即通報管理員，提交作弊報告，我們將會進行調查並採取相應措施。</p>
+                </div>
+
+                <button class="faq-question">如何提交建議或反饋？</button>
+                <div class="faq-answer">
+                    <p>您隨時可於伺服器聊天頻道中提出意見，或直接聯繫管理員。</p>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        var acc = document.getElementsByClassName("faq-question");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                    panel.classList.remove("active");
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                    panel.classList.add("active");
+                }
+            });
+        }
+    </script>
 </body>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "53011111e89a404697101886fbee6f66"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "53011111e89a404697101886fbee6f66"}'></script><!-- End Cloudflare Web Analytics -->
+
 </html>
 <!-- 你有甚麼問題，我們才不管，反正你問的問題我們都不會回答，這是一個假的網站，你懂的。 
                                                         - by 很嗆的AI 2024/07/05 -->
