@@ -307,7 +307,7 @@ td {
     background-color: rgba(130, 170, 255, 0.2) !important;
     color: #d0d0d0 !important;
     cursor: pointer ;
-    padding: 15px !important;
+    padding: 10px !important;
     width: 100%;
     border: none;
     text-align: left;
@@ -316,7 +316,7 @@ td {
     transition: all 0.3s ease;
     border-radius: 10px;
     position: relative;
-    margin: 10px 0 !important;
+    margin: 0 0 20px !important;
     font-weight: bold !important;
 }
 
@@ -345,7 +345,8 @@ td {
     overflow: hidden;
     transition: max-height 0.3s ease-out, padding 0.3s ease;
     border-radius: 0 0 10px 10px;
-    margin-top: -10px;
+    margin-top: -20px;
+    margin-bottom: 10px;
 }
 
 .faq-answer.active {
