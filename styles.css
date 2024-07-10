@@ -154,12 +154,15 @@ h2 {
     border-bottom: 2px solid #3d5afe;
     padding-bottom: 10px;
     font-size: 1.8em;
+    margin-top: 10px;
+    /* margin-bottom: 15px; */
 }
 
 h3 {
     color: #82aaff;
     font-size: 1.2 em;
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-bottom: -5px;
 }
 
 ul {
@@ -356,4 +359,26 @@ td {
 .faq-answer p {
     margin: 0;
     line-height: 1.6;
+}
+
+
+ol > li::before {
+    content: none;
+}
+
+ol > li {
+    counter-increment: my-awesome-counter;
+    margin-bottom: 10px;
+}
+
+.highlight_text {
+    color: #5c74ff;
+    font-weight: bold;
+}
+
+.highlight_url {
+    color: #5a8eff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
