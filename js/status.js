@@ -39,9 +39,9 @@ function updateServerInfo(javaData, beData, serverId) {
     }
 
     if (javaData && javaData.status === 'online') {
-        playersElement.textContent = `${javaData.online} / ${javaData.max} (${javaData.delay}ms)`;
+        playersElement.textContent = `${javaData.online} / ${javaData.max}　${javaData.delay}ms`;
     } else if (beData && beData.status === 'online') {
-        playersElement.textContent = `${beData.online} / ${beData.max} (${beData.delay}ms)`;
+        playersElement.textContent = `${beData.online} / ${beData.max}　${beData.delay}ms`;
     } else {
         playersElement.textContent = 'N/A';
     }
