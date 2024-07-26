@@ -396,3 +396,25 @@ ol > li {
     vertical-align: middle;
     margin:0px 5px 5px;
 }
+
+/* 新的按鈕樣式 */
+.open-new-window-button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 10px 0;
+    background-color: rgba(130, 170, 255, 0.2);
+    color: #82aaff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(130, 170, 255, 0.5);
+    font-family: 'VT323', monospace;
+    position: relative;
+}
+
+
+.open-new-window-button:hover {
+    background-color: rgba(130, 170, 255, 0.3);
+    color: #ffffff;
+}
