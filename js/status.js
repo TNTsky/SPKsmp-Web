@@ -19,7 +19,7 @@ function updateServerInfo(javaData, beData, serverId) {
     let isJavaOnline = false;
 
     // 更新 Java 版
-    if (javaData) {
+    if (javaData && javaData.status === 'online') {
         javaStatusElement.textContent = '在線';
         javaStatusElement.style.color = '#2ecc71';
         javaVersionElement.textContent = javaData.version || 'N/A';
@@ -36,7 +36,7 @@ function updateServerInfo(javaData, beData, serverId) {
     }
 
     // 更新 BE 版
-    if (beData) {
+    if (beData && beData.status === 'online') {
         beStatusElement.textContent = '在線';
         beStatusElement.style.color = '#2ecc71';
         beVersionElement.textContent = beData.version || 'N/A';
@@ -47,9 +47,9 @@ function updateServerInfo(javaData, beData, serverId) {
     }
 
     // 更新玩家資訊
-    if (javaData) {
+    if (javaData && javaData.status === 'online') {
         playersElement.textContent = `${javaData.online} / ${javaData.max}　${javaData.delay}ms`;
-    } else if (beData) {
+    } else if (beData && beData.status === 'online') {
         playersElement.textContent = `${beData.online} / ${beData.max}　${beData.delay}ms`;
     } else {
         playersElement.textContent = 'N/A';
