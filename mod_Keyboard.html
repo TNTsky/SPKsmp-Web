@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparkle 模組包預設鍵位一覽表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .config-section {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #404040;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .config-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            color: white;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            background: linear-gradient(145deg, #4a90e2, #357abd);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: bold;
+        }
+
+        .file-input-label:hover {
+            background: linear-gradient(145deg, #357abd, #2d6aa3);
+            transform: translateY(-2px);
+        }
+
+        .download-btn {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: bold;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(145deg, #1e7e34, #155724);
+            transform: translateY(-2px);
+        }
+
+        .config-info {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .keyboard-container {
+            background: #2c2c2c;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #404040;
+        }
+
+        .keyboard {
+            display: grid;
+            gap: 4px;
+            max-width: 1200px;
+        }
+
+        .row {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-start;
+        }
+
+        .key {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            border: 1px solid #555;
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            user-select: none;
+            height: 45px;
+            min-width: 45px;
+        }
+
+        /* 遊戲預設按鍵樣式 */
+        .key.default {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            border-color: #555;
+        }
+
+        .key.default:hover {
+            background: linear-gradient(145deg, #4a4a4a, #3a3a3a);
+            border-color: #666;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 模組功能按鍵樣式 */
+        .key.mod {
+            background: linear-gradient(145deg, #6a4c93, #5a3d7a);
+            border-color: #8b5fbf;
+        }
+
+        .key.mod:hover {
+            background: linear-gradient(145deg, #7a5ca3, #6a4c93);
+            border-color: #9d71d1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 95, 191, 0.4);
+        }
+
+        .key:active {
+            transform: translateY(0);
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+        }
+
+        .key.pressed {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+            border-color: #ff4757;
+            transform: translateY(1px);
+        }
+
+        /* 特殊按鍵尺寸 */
+        .key.tab { width: 75px; }
+        .key.caps { width: 90px; }
+        .key.shift-left { width: 130px; }
+        .key.shift-right { width: 125px; }
+        .key.ctrl { width: 78px; }
+        .key.alt { width: 65px; }
+        .key.space { width: 300px; }
+        .key.enter { width: 115px; }
+        .key.backspace { width: 110px; }
+        .key.backslash { width: 80px; }
+
+        /* 功能鍵區域 */
+        .function-keys {
+            margin-bottom: 15px;
+        }
+
+        /* 工具提示 */
+        .tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid #555;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            white-space: normal;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip .key-type {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .tooltip .key-type.default {
+            background: #4a4a4a;
+            color: #fff;
+        }
+
+        .tooltip .key-type.mod {
+            background: #8b5fbf;
+            color: #fff;
+        }
+
+        .tooltip .mod-name {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .main-keyboard {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end; /* 讓所有區域底部對齊 */
+        }
+
+        .left-section {
+            flex: 1;
+        }
+
+        .right-section {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end; /* 恢復底部對齊 */
+        }
+
+        .nav-arrow-section {
+            display: flex;
+            flex-direction: column;
+            gap: 38px;
+            justify-content: flex-end; /* 讓方向鍵區域向下對齊 */
+            position: relative;
+            top: 0px; /* 向上移動導航鍵區域，讓Insert對齊Backspace */
+        }
+
+        .nav-cluster {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 4px;
+        }
+
+        .arrow-cluster {
+            display: grid;
+            grid-template-areas: 
+                ". up ."
+                "left down right";
+            gap: 4px;
+        }
+
+        .arrow-up { grid-area: up; }
+        .arrow-left { grid-area: left; }
+        .arrow-down { grid-area: down; }
+        .arrow-right { grid-area: right; }
+
+        .numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+
+        .key.numpad-0 { grid-column: span 2; width: 94px; }
+        .key.numpad-plus { grid-row: span 2; height: 94px; }
+        .key.numpad-enter { grid-row: span 2; height: 94px; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #666;
+        }
+
+        .legend-color.default {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+        }
+
+        .legend-color.mod {
+            background: linear-gradient(145deg, #6a4c93, #5a3d7a);
+        }
+
+        .addon-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .combo-keys {
+            flex: 1;
+            color: white;
+        }
+
+        .combo-keys h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #666;
+            padding-bottom: 5px;
+        }
+
+        .combo-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .combo-table td {
+            border: 1px solid #888;
+            padding: 5px 10px;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .combo-key {
+            display: inline-block;
+            padding: 3px 6px;
+            margin-right: 4px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .search-panel {
+            flex: 1;
+            color: white;
+        }
+
+        .search-panel h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #666;
+            padding-bottom: 5px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #666;
+            border-radius: 5px;
+            background: #1c1c1c;
+            color: white;
+        }
+
+        .search-result {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .search-result div {
+            padding: 5px 0;
+            border-bottom: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="keyboard-container">
+        <div class="header">
+            <h1>Sparkle 模組包預設鍵位一覽表</h1>
+            <p>將滑鼠移動到按鍵上查看功能對應</p>
+        </div>
+     
+        <!-- 功能鍵區 -->
+        <div class="function-keys">
+            <div class="row">
+                <div class="key default" data-key="Escape">Esc</div>
+                <div style="width: 50px;"></div>
+                <div class="key default" data-key="F1">F1</div>
+                <div class="key default" data-key="F2">F2</div>
+                <div class="key default" data-key="F3">F3</div>
+                <div class="key default" data-key="F4">F4</div>
+                <div style="width: 25px;"></div>
+                <div class="key default" data-key="F5">F5</div>
+                <div class="key default" data-key="F6">F6</div>
+                <div class="key default" data-key="F7">F7</div>
+                <div class="key default" data-key="F8">F8</div>
+                <div style="width: 25px;"></div>
+                <div class="key default" data-key="F9">F9</div>
+                <div class="key default" data-key="F10">F10</div>
+                <div class="key default" data-key="F11">F11</div>
+                <div class="key default" data-key="F12">F12</div>
+                <div style="width: 10px;"></div>
+                <div class="key default" data-key="PrintScreen">PrtSc</div>
+                <div class="key default" data-key="ScrollLock">ScrLk</div>
+                <div class="key default" data-key="Pause">Pause</div>
+            </div>
+        </div>
+
+        <div class="main-keyboard">
+            <div class="left-section">
+                <!-- 數字列 -->
+                <div class="row">
+                    <div class="key default" data-key="`">~</div>
+                    <div class="key default" data-key="1">1</div>
+                    <div class="key default" data-key="2">2</div>
+                    <div class="key default" data-key="3">3</div>
+                    <div class="key default" data-key="4">4</div>
+                    <div class="key default" data-key="5">5</div>
+                    <div class="key default" data-key="6">6</div>
+                    <div class="key default" data-key="7">7</div>
+                    <div class="key default" data-key="8">8</div>
+                    <div class="key default" data-key="9">9</div>
+                    <div class="key default" data-key="0">0</div>
+                    <div class="key default" data-key="-">-</div>
+                    <div class="key default" data-key="=">=</div>
+                    <div class="key backspace default" data-key="Backspace">Backspace</div>
+                </div>
+
+                <!-- 第一排字母 -->
+                <div class="row">
+                    <div class="key tab default" data-key="Tab">Tab</div>
+                    <div class="key default" data-key="q">Q</div>
+                    <div class="key default" data-key="w">W</div>
+                    <div class="key default" data-key="e">E</div>
+                    <div class="key default" data-key="r">R</div>
+                    <div class="key default" data-key="t">T</div>
+                    <div class="key default" data-key="y">Y</div>
+                    <div class="key default" data-key="u">U</div>
+                    <div class="key default" data-key="i">I</div>
+                    <div class="key default" data-key="o">O</div>
+                    <div class="key default" data-key="p">P</div>
+                    <div class="key default" data-key="[">[</div>
+                    <div class="key default" data-key="]">]</div>
+                    <div class="key backslash default" data-key="\\">\\</div>
+                </div>
+
+                <!-- 第二排字母 -->
+                <div class="row">
+                    <div class="key caps default" data-key="CapsLock">Caps Lock</div>
+                    <div class="key default" data-key="a">A</div>
+                    <div class="key default" data-key="s">S</div>
+                    <div class="key default" data-key="d">D</div>
+                    <div class="key default" data-key="f">F</div>
+                    <div class="key default" data-key="g">G</div>
+                    <div class="key default" data-key="h">H</div>
+                    <div class="key default" data-key="j">J</div>
+                    <div class="key default" data-key="k">K</div>
+                    <div class="key default" data-key="l">L</div>
+                    <div class="key default" data-key=";">;</div>
+                    <div class="key default" data-key="'">'</div>
+                    <div class="key enter default" data-key="Enter">Enter</div>
+                </div>
+
+                <!-- 第三排字母 -->
+                <div class="row">
+                    <div class="key shift-left default" data-key="ShiftLeft">Shift</div>
+                    <div class="key default" data-key="z">Z</div>
+                    <div class="key default" data-key="x">X</div>
+                    <div class="key default" data-key="c">C</div>
+                    <div class="key default" data-key="v">V</div>
+                    <div class="key default" data-key="b">B</div>
+                    <div class="key default" data-key="n">N</div>
+                    <div class="key default" data-key="m">M</div>
+                    <div class="key default" data-key="Comma">,</div>
+                    <div class="key default" data-key=".">.</div>
+                    <div class="key default" data-key="/">/</div>
+                    <div class="key shift-right default" data-key="ShiftRight">Shift</div>
+                </div>
+
+                <!-- 最底排 -->
+                <div class="row">
+                    <div class="key ctrl default" data-key="ControlLeft">Ctrl</div>
+                    <div class="key default" data-key="MetaLeft">Win</div>
+                    <div class="key alt default" data-key="AltLeft">Alt</div>
+                    <div class="key space default" data-key="Space">Space</div>
+                    <div class="key alt default" data-key="AltRight">Alt</div>
+                    <div class="key default" data-key="MetaRight">Win</div>
+                    <div class="key default" data-key="ContextMenu">Menu</div>
+                    <div class="key ctrl default" data-key="ControlRight">Ctrl</div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="nav-arrow-section">
+                    <!-- 導航鍵群組 -->
+                    <div class="nav-cluster">
+                        <div class="key default" data-key="Insert">Insert</div>
+                        <div class="key default" data-key="Home">Home</div>
+                        <div class="key default" data-key="PageUp">PgUp</div>
+                        <div class="key default" data-key="Delete">Delete</div>
+                        <div class="key default" data-key="End">End</div>
+                        <div class="key default" data-key="PageDown">PgDn</div>
+                    </div>
+
+                    <!-- 方向鍵 -->
+                    <div class="arrow-cluster">
+                        <div class="key arrow-up default" data-key="ArrowUp">↑</div>
+                        <div class="key arrow-left default" data-key="ArrowLeft">←</div>
+                        <div class="key arrow-down default" data-key="ArrowDown">↓</div>
+                        <div class="key arrow-right default" data-key="ArrowRight">→</div>
+                    </div>
+                </div>
+
+                <!-- 數字鍵盤 -->
+                <div class="numpad-grid">
+                    <div class="key default" data-key="NumLock">Num</div>
+                    <div class="key default" data-key="NumpadDivide">÷</div>
+                    <div class="key default" data-key="NumpadMultiply">×</div>
+                    <div class="key default" data-key="NumpadSubtract">-</div>
+                    <div class="key default" data-key="Numpad7">7</div>
+                    <div class="key default" data-key="Numpad8">8</div>
+                    <div class="key default" data-key="Numpad9">9</div>
+                    <div class="key numpad-plus default" data-key="NumpadAdd">+</div>
+                    <div class="key default" data-key="Numpad4">4</div>
+                    <div class="key default" data-key="Numpad5">5</div>
+                    <div class="key default" data-key="Numpad6">6</div>
+                    <div class="key default" data-key="Numpad1">1</div>
+                    <div class="key default" data-key="Numpad2">2</div>
+                    <div class="key default" data-key="Numpad3">3</div>
+                    <div class="key numpad-enter default" data-key="NumpadEnter">Enter</div>
+                    <div class="key numpad-0 default" data-key="Numpad0">0</div>
+                    <div class="key default" data-key="NumpadDecimal">.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="addon-section">
+            <div class="combo-keys">
+                <h3>常用模組組合鍵</h3>
+                <table class="combo-table">
+                    <tr><td><span class="combo-key">X</span>+<span class="combo-key">C</span></td><td>Tweakeroo 設定</td></tr>
+                    <tr><td><span class="combo-key">H</span>+<span class="combo-key">C</span></td><td>MiniHUD設定</td></tr>
+                    <tr><td><span class="combo-key">M</span>+<span class="combo-key">R</span></td><td>投影顯示開關</td></tr>
+                    <tr><td><span class="combo-key">M</span>+<span class="combo-key">PageUp</span></td><td>下一渲染模式</td></tr>
+                    <tr><td><span class="combo-key">M</span>+<span class="combo-key">PageDown</span></td><td>上一渲染模式</td></tr>
+                    <tr><td><span class="combo-key">M</span>+<span class="combo-key">V</span></td><td>原理圖驗證器</td></tr>
+                    <tr><td><span class="combo-key">M</span>+<span class="combo-key">L</span></td><td>材料清單</td></tr>
+                    <tr><td><span class="combo-key">A</span>+<span class="combo-key">C</span></td><td>Malilib設定</td></tr>
+                </table>
+            </div>
+
+            <div class="search-panel">
+                <h3>功能搜尋</h3>
+                <input type="text" id="searchBox" class="search-input" placeholder="輸入功能名稱...">
+                <div id="searchResults" class="search-result"></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color default"></div>
+                <span>原版功能</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color mod"></div>
+                <span>模組功能</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        class ConfigurableKeyboard {
+            constructor() {
+                this.keys = document.querySelectorAll('.key');
+                this.tooltip = document.getElementById('tooltip');
+                this.pressedKeys = new Set();
+                this.keyConfig = new Map();
+                this.init();
+            }
+
+            init() {
+                this.keys.forEach(key => {
+                    // 滑鼠事件
+                    key.addEventListener('mouseenter', (e) => this.showTooltip(e));
+                    key.addEventListener('mouseleave', () => this.hideTooltip());
+                    key.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
+                    key.addEventListener('click', (e) => this.handleKeyClick(e));
+
+                    key.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                    key.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+                });
+
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+                
+                window.addEventListener('blur', () => this.clearAllPressed());
+
+                const configFileEl = document.getElementById('configFile');
+                if (configFileEl) {
+                    configFileEl.addEventListener('change', (e) => this.loadConfigFile(e));
+                }
+
+                this.loadMinecraftConfig();
+                
+                // 初始化搜尋功能（需要在載入配置後執行）
+                this.initSearch();
+            }
+
+            initSearch() {
+                const searchBox = document.getElementById('searchBox');
+                const searchResults = document.getElementById('searchResults');
+                
+                if (searchBox && searchResults) {
+                    searchBox.addEventListener('input', (e) => {
+                        const query = e.target.value.trim().toLowerCase();
+                        searchResults.innerHTML = '';
+
+                        if (!query) return;
+
+                        const matched = Array.from(this.keys)
+                            .map(key => ({
+                                key: key.getAttribute('data-key'),
+                                func: key.getAttribute('data-game-key') || '',
+                                type: key.getAttribute('data-key-type') || 'default',
+                                mod: key.getAttribute('data-mod-name') || ''
+                            }))
+                            .filter(item => 
+                                item.func.toLowerCase().includes(query) || 
+                                item.mod.toLowerCase().includes(query)
+                            );
+
+                        if (matched.length === 0) {
+                            searchResults.innerHTML = '<div>未找到符合的功能。</div>';
+                        } else {
+                            matched.forEach(item => {
+                                const row = document.createElement('div');
+                                let displayText = `鍵位: ${item.key} | 功能: ${item.func}`;
+                                if (item.type === 'mod' && item.mod) {
+                                    displayText += ` | 模組: ${item.mod}`;
+                                }
+                                row.textContent = displayText;
+                                searchResults.appendChild(row);
+                            });
+                        }
+                    });
+                }
+            }
+
+            hideTooltip() {
+                this.tooltip.classList.remove('show');
+            }
+
+            updateTooltipPosition(event) {
+                const rect = event.target.getBoundingClientRect();
+                const tooltipRect = this.tooltip.getBoundingClientRect();
+                
+                let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+                let top = rect.top - tooltipRect.height - 10;
+                
+                // 確保工具提示不會超出螢幕邊界
+                if (left < 10) left = 10;
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+                if (top < 10) {
+                    top = rect.bottom + 10;
+                }
+                
+                this.tooltip.style.left = left + 'px';
+                this.tooltip.style.top = top + 'px';
+            }
+
+            handleKeyClick(event) {
+                const key = event.target;
+                const keyName = key.getAttribute('data-key');
+                
+                // 添加點擊動畫
+                key.style.transform = 'translateY(2px)';
+                setTimeout(() => {
+                    key.style.transform = '';
+                }, 100);
+
+                console.log(`鍵盤按鍵被點擊: ${keyName}`);
+            }
+
+            handleMouseDown(event) {
+                event.target.classList.add('pressed');
+            }
+
+            handleMouseUp(event) {
+                event.target.classList.remove('pressed');
+            }
+
+            handleKeyDown(event) {
+                // 防止重複觸發
+                if (this.pressedKeys.has(event.code)) return;
+                
+                this.pressedKeys.add(event.code);
+                const keyElement = this.findKeyElement(event.code);
+                
+                if (keyElement) {
+                    keyElement.classList.add('pressed');
+                    console.log(`實體鍵盤按下: ${event.code}`);
+                }
+            }
+
+            loadMinecraftConfig() {
+                const minecraftConfig = 
+`Escape,暫停選單,default
+F1,隱藏HUD,default
+F2,截圖,default
+F3,偵錯畫面,default
+F4,未使用,default
+F5,第三人稱視角,default
+F6,未使用,default
+F7,顯示亮度等級,mod,Tweakeroo
+F8,未使用,default
+F9,更改手長,mod,Tweakeroo
+F10,未使用,default
+F11,全螢幕,default
+F12,開關挖掘冷卻,mod,Tweakeroo
+PrintScreen,截圖(Windows自帶),default
+ScrollLock,未使用,default
+Pause,未使用,default
+\`,偽潛行,mod,Tweakeroo
+1,快捷欄1,default
+2,快捷欄2,default
+3,快捷欄3,default
+4,快捷欄4,default
+5,快捷欄5,default
+6,快捷欄6,default
+7,快捷欄7,default
+8,快捷欄8,default
+9,快捷欄9,default
+0,放置限制,mod,Tweakeroo
+-,光影選擇,mod,Iris
+=,光影開關,mod,Iris
+Backspace,未使用,default
+Tab,玩家列表,default
+q,丟棄物品,default
+w,向前移動,default
+e,打開物品欄,default
+r,輕鬆放置模式,mod,Tweakeroo
+t,聊天,default
+y,小地圖設定,mod,Xaero's Minimap
+u,修復模式,mod,Tweakeroo
+i,投影容器預覽,mod,Litematica
+o,自由視角,mod,Tweakeroo
+p,未設定(移除原版功能),default
+[,重新載入光影,mod,Iris
+],未使用,default
+\\,未使用,default
+CapsLock,未設定,default
+a,向左移動,default
+s,向後移動,default
+d,向右移動,default
+f,切換主副手物品,default
+g,未使用,default
+h,MiniHUD開關,mod,MiniHUD
+j,打印機模式切換,mod,Litematica
+k,碰撞箱顯示,mod,MiniHUD
+l,形狀渲染器,mod,MiniHUD
+;,未使用,default
+',未使用,default
+Enter,貼上投影(創造模式/投影模式5),mod,Litematica
+ShiftLeft,潛行,default
+z,小地圖放大,mod,Xaero's Minimap
+x,未使用,default
+c,放大,mod,Tweakeroo
+v,未使用,default
+b,新增定位點,mod,Xaero's Minimap
+n,自動工具切換,mod,Tweakeroo
+m,投影菜單,mod,Litematica
+Comma,開啟小地圖,mod,Xaero's Minimap
+.,靈活放置,mod,Tweakeroo
+/,指令,default
+ShiftRight,未使用,default
+ControlLeft,疾跑/靈活放置,mod,Tweakeroo
+MetaLeft,Windows,default
+AltLeft,容器預覽,mod,Tweakeroo
+Space,跳躍,default
+AltRight,未使用,default
+MetaRight,Windows,default
+ContextMenu,未使用,default
+ControlRight,原理圖透視,mod,Litematica
+Insert,未使用,default
+Home,未使用,default
+PageUp,投影往上一層,mod,Litematica
+Delete,未使用,default
+End,未使用,default
+PageDown,投影往下一層,mod,Litematica
+ArrowUp,未使用,default
+ArrowLeft,未使用,default
+ArrowDown,未使用,default
+ArrowRight,未使用,default
+NumLock,未使用,default
+NumpadDivide,關閉粒子顯示,mod,Tweakeroo
+NumpadMultiply,區域選擇器,mod,Litematica
+NumpadSubtract,原理圖放置,mod,Litematica
+Numpad7,快速左鍵,mod,Tweakeroo
+Numpad8,快速放置,mod,Tweakeroo
+Numpad9,快速右鍵,mod,Tweakeroo
+NumpadAdd,Gamma修改,mod,Tweakeroo
+Numpad4,定時左鍵,mod,Tweakeroo
+Numpad5,自動放置同類方塊,mod,Tweakeroo
+Numpad6,定時右鍵,mod,Tweakeroo
+Numpad1,按住左鍵,mod,Tweakeroo
+Numpad2,飛行加速(按住加滾輪修改速度),mod,Tweakeroo
+Numpad3,按住右鍵,mod,Tweakeroo
+NumpadEnter,未使用,default
+Numpad0,Jade設定,mod,Jade
+NumpadDecimal,投影打印機開關,mod,Litematica`;
+
+                this.parseConfigText(minecraftConfig);
+            }
+
+            parseConfigText(text) {
+                this.keyConfig.clear();
+                const lines = text.trim().split('\n');
+                
+                lines.forEach(line => {
+                    if (line.startsWith('#') || line.trim() === '') return; 
+                    const parts = line.split(',').map(part => part.trim());
+                    if (parts.length >= 3) {
+                        const [keyName, function_, type, modName] = parts;
+                        this.keyConfig.set(keyName, {
+                            function: function_,
+                            type: type,
+                            modName: modName || '' // 模組名稱，可選
+                        });
+                    }
+                });
+
+                this.updateKeyboardDisplay();
+            }
+
+            updateKeyboardDisplay() {
+                this.keys.forEach(key => {
+                    const keyName = key.getAttribute('data-key');
+                    const config = this.keyConfig.get(keyName);
+                    
+                    if (config) {
+                        key.classList.remove('default', 'mod');
+                        key.classList.add(config.type);
+                        key.setAttribute('data-game-key', config.function);
+                        key.setAttribute('data-key-type', config.type);
+                        
+                        // 模組名稱屬性
+                        if (config.modName) {
+                            key.setAttribute('data-mod-name', config.modName);
+                        } else {
+                            key.removeAttribute('data-mod-name');
+                        }
+                    }
+                });
+            }
+
+            showTooltip(event) {
+                const key = event.target;
+                const gameKey = key.getAttribute('data-game-key');
+                const keyName = key.getAttribute('data-key');
+                const keyType = key.getAttribute('data-key-type') || 'default';
+                const modName = key.getAttribute('data-mod-name');
+                
+                if (gameKey) {
+                    const typeLabel = keyType === 'mod' ? '模組功能' : '原版功能';
+                    const typeClass = keyType === 'mod' ? 'mod' : 'default';
+                    
+                    let tooltipContent = `
+                        <div><strong>按鍵:</strong> ${keyName}</div>
+                        <div><strong>功能:</strong> ${gameKey} <span class="key-type ${typeClass}">${typeLabel}</span></div>
+                    `;
+
+                    if (keyType === 'mod' && modName) {
+                        tooltipContent += `<div class="mod-name">模組: ${modName}</div>`;
+                    }
+                    
+                    this.tooltip.innerHTML = tooltipContent;
+                    this.tooltip.classList.add('show');
+                    this.updateTooltipPosition(event);
+                }
+            }
+
+            handleKeyUp(event) {
+                this.pressedKeys.delete(event.code);
+                const keyElement = this.findKeyElement(event.code);
+                
+                if (keyElement) {
+                    keyElement.classList.remove('pressed');
+                    console.log(`實體鍵盤放開: ${event.code}`);
+                }
+            }
+
+            findKeyElement(code) {
+                // 鍵碼映射表
+                const keyMap = {
+                    'Escape': 'Escape',
+                    'F1': 'F1', 'F2': 'F2', 'F3': 'F3', 'F4': 'F4',
+                    'F5': 'F5', 'F6': 'F6', 'F7': 'F7', 'F8': 'F8',
+                    'F9': 'F9', 'F10': 'F10', 'F11': 'F11', 'F12': 'F12',
+                    'Backquote': '`',
+                    'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5',
+                    'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0',
+                    'Minus': '-', 'Equal': '=', 'Backspace': 'Backspace',
+                    'Tab': 'Tab',
+                    'KeyQ': 'q', 'KeyW': 'w', 'KeyE': 'e', 'KeyR': 'r', 'KeyT': 't',
+                    'KeyY': 'y', 'KeyU': 'u', 'KeyI': 'i', 'KeyO': 'o', 'KeyP': 'p',
+                    'BracketLeft': '[', 'BracketRight': ']', 'Backslash': '\\',
+                    'CapsLock': 'CapsLock',
+                    'KeyA': 'a', 'KeyS': 's', 'KeyD': 'd', 'KeyF': 'f', 'KeyG': 'g',
+                    'KeyH': 'h', 'KeyJ': 'j', 'KeyK': 'k', 'KeyL': 'l',
+                    'Semicolon': ';', 'Quote': "'", 'Enter': 'Enter',
+                    'ShiftLeft': 'ShiftLeft',
+                    'KeyZ': 'z', 'KeyX': 'x', 'KeyC': 'c', 'KeyV': 'v', 'KeyB': 'b',
+                    'KeyN': 'n', 'KeyM': 'm', 'Comma': 'Comma', 'Period': '.', 'Slash': '/',
+                    'ShiftRight': 'ShiftRight',
+                    'ControlLeft': 'ControlLeft', 'MetaLeft': 'MetaLeft', 'AltLeft': 'AltLeft',
+                    'Space': 'Space',
+                    'AltRight': 'AltRight', 'MetaRight': 'MetaRight', 'ContextMenu': 'ContextMenu',
+                    'ControlRight': 'ControlRight',
+                    'PrintScreen': 'PrintScreen', 'ScrollLock': 'ScrollLock', 'Pause': 'Pause',
+                    'Insert': 'Insert', 'Home': 'Home', 'PageUp': 'PageUp',
+                    'Delete': 'Delete', 'End': 'End', 'PageDown': 'PageDown',
+                    'ArrowUp': 'ArrowUp', 'ArrowLeft': 'ArrowLeft', 'ArrowDown': 'ArrowDown', 'ArrowRight': 'ArrowRight',
+                    'NumLock': 'NumLock', 'NumpadDivide': 'NumpadDivide', 'NumpadMultiply': 'NumpadMultiply', 'NumpadSubtract': 'NumpadSubtract',
+                    'Numpad7': 'Numpad7', 'Numpad8': 'Numpad8', 'Numpad9': 'Numpad9', 'NumpadAdd': 'NumpadAdd',
+                    'Numpad4': 'Numpad4', 'Numpad5': 'Numpad5', 'Numpad6': 'Numpad6',
+                    'Numpad1': 'Numpad1', 'Numpad2': 'Numpad2', 'Numpad3': 'Numpad3', 'NumpadEnter': 'NumpadEnter',
+                    'Numpad0': 'Numpad0', 'NumpadDecimal': 'NumpadDecimal'
+                };
+
+                const mappedKey = keyMap[code];
+                if (mappedKey) {
+                    return document.querySelector(`[data-key="${mappedKey}"]`);
+                }
+                return null;
+            }
+
+            clearAllPressed() {
+                this.pressedKeys.clear();
+                this.keys.forEach(key => {
+                    key.classList.remove('pressed');
+                });
+            }
+        }
+
+        // 初始化鍵盤
+        document.addEventListener('DOMContentLoaded', () => {
+            new ConfigurableKeyboard();
+        });
+    </script>
+</body>
