@@ -89,18 +89,87 @@
             font-size: 14px;
         }
 
+        /* 橫向提示 */
+        .rotation-notice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .rotation-notice .phone-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: rotate 2s infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .rotation-notice h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .rotation-notice p {
+            font-size: 16px;
+            color: #ccc;
+        }
+        
         .keyboard-container {
             background: #2c2c2c;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 2px solid #404040;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .keyboard-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #666 #2c2c2c;
+        }
+
+        .keyboard-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .keyboard-scroll-container::-webkit-scrollbar-track {
+            background: #2c2c2c;
+            border-radius: 4px;
+        }
+
+        .keyboard-scroll-container::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .keyboard-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #888;
         }
 
         .keyboard {
             display: grid;
             gap: 4px;
-            max-width: 1200px;
+            min-width: 1100px; /* 鍵盤最小寬度 */
         }
 
         .row {
@@ -126,6 +195,7 @@
             user-select: none;
             height: 45px;
             min-width: 45px;
+            flex-shrink: 0; /* 防止按鍵被壓縮 */
         }
 
         /* 遊戲預設按鍵樣式 */
@@ -246,26 +316,27 @@
         .main-keyboard {
             display: flex;
             gap: 15px;
-            align-items: flex-end; /* 讓所有區域底部對齊 */
+            align-items: flex-end;
         }
 
         .left-section {
-            flex: 1;
+            flex: 0 0 auto; 
         }
 
         .right-section {
             display: flex;
             gap: 15px;
-            align-items: flex-end; /* 恢復底部對齊 */
+            align-items: flex-end;
+            flex: 0 0 auto;
         }
 
         .nav-arrow-section {
             display: flex;
             flex-direction: column;
             gap: 38px;
-            justify-content: flex-end; /* 讓方向鍵區域向下對齊 */
+            justify-content: flex-end;
             position: relative;
-            top: 0px; /* 向上移動導航鍵區域，讓Insert對齊Backspace */
+            top: 0px;
         }
 
         .nav-cluster {
@@ -416,6 +487,13 @@
             padding: 5px 0;
             border-bottom: 1px solid #444;
         }
+
+        @media (max-width: 768px) {
+            .addon-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -425,184 +503,166 @@
             <p>將滑鼠移動到按鍵上查看功能對應</p>
         </div>
         
-        <div id="rotateNotice" style="
-            display:none;
-            position:fixed;
-            top:0;left:0;right:0;bottom:0;
-            background:rgba(0,0,0,0.85);
-            color:white;
-            font-size:18px;
-            z-index:9999;
-            text-align:center;
-            padding-top:40%;
-        ">
-            📱 請將裝置橫過來以正常顯示鍵盤
-        </div>
-        <script>
-        function checkOrientation() {
-            const notice = document.getElementById('rotateNotice');
-            if (window.innerHeight > window.innerWidth) {
-                notice.style.display = 'block'; // 直立模式顯示
-            } else {
-                notice.style.display = 'none'; // 橫向隱藏
-            }
-        }
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
-        checkOrientation();
-        </script>
-
-
-        <!-- 功能鍵區 -->
-        <div class="function-keys">
-            <div class="row">
-                <div class="key default" data-key="Escape">Esc</div>
-                <div style="width: 50px;"></div>
-                <div class="key default" data-key="F1">F1</div>
-                <div class="key default" data-key="F2">F2</div>
-                <div class="key default" data-key="F3">F3</div>
-                <div class="key default" data-key="F4">F4</div>
-                <div style="width: 25px;"></div>
-                <div class="key default" data-key="F5">F5</div>
-                <div class="key default" data-key="F6">F6</div>
-                <div class="key default" data-key="F7">F7</div>
-                <div class="key default" data-key="F8">F8</div>
-                <div style="width: 25px;"></div>
-                <div class="key default" data-key="F9">F9</div>
-                <div class="key default" data-key="F10">F10</div>
-                <div class="key default" data-key="F11">F11</div>
-                <div class="key default" data-key="F12">F12</div>
-                <div style="width: 10px;"></div>
-                <div class="key default" data-key="PrintScreen">PrtSc</div>
-                <div class="key default" data-key="ScrollLock">ScrLk</div>
-                <div class="key default" data-key="Pause">Pause</div>
-            </div>
+        <div id="rotateNotice" class="rotation-notice">
+            <div class="phone-icon">📱</div>
+            <h2>請將裝置橫過來</h2>
+            <p>以獲得最佳顯示效果</p>
         </div>
 
-        <div class="main-keyboard">
-            <div class="left-section">
-                <!-- 數字列 -->
-                <div class="row">
-                    <div class="key default" data-key="`">~</div>
-                    <div class="key default" data-key="1">1</div>
-                    <div class="key default" data-key="2">2</div>
-                    <div class="key default" data-key="3">3</div>
-                    <div class="key default" data-key="4">4</div>
-                    <div class="key default" data-key="5">5</div>
-                    <div class="key default" data-key="6">6</div>
-                    <div class="key default" data-key="7">7</div>
-                    <div class="key default" data-key="8">8</div>
-                    <div class="key default" data-key="9">9</div>
-                    <div class="key default" data-key="0">0</div>
-                    <div class="key default" data-key="-">-</div>
-                    <div class="key default" data-key="=">=</div>
-                    <div class="key backspace default" data-key="Backspace">Backspace</div>
-                </div>
-
-                <!-- 第一排字母 -->
-                <div class="row">
-                    <div class="key tab default" data-key="Tab">Tab</div>
-                    <div class="key default" data-key="q">Q</div>
-                    <div class="key default" data-key="w">W</div>
-                    <div class="key default" data-key="e">E</div>
-                    <div class="key default" data-key="r">R</div>
-                    <div class="key default" data-key="t">T</div>
-                    <div class="key default" data-key="y">Y</div>
-                    <div class="key default" data-key="u">U</div>
-                    <div class="key default" data-key="i">I</div>
-                    <div class="key default" data-key="o">O</div>
-                    <div class="key default" data-key="p">P</div>
-                    <div class="key default" data-key="[">[</div>
-                    <div class="key default" data-key="]">]</div>
-                    <div class="key backslash default" data-key="\\">\\</div>
-                </div>
-
-                <!-- 第二排字母 -->
-                <div class="row">
-                    <div class="key caps default" data-key="CapsLock">Caps Lock</div>
-                    <div class="key default" data-key="a">A</div>
-                    <div class="key default" data-key="s">S</div>
-                    <div class="key default" data-key="d">D</div>
-                    <div class="key default" data-key="f">F</div>
-                    <div class="key default" data-key="g">G</div>
-                    <div class="key default" data-key="h">H</div>
-                    <div class="key default" data-key="j">J</div>
-                    <div class="key default" data-key="k">K</div>
-                    <div class="key default" data-key="l">L</div>
-                    <div class="key default" data-key=";">;</div>
-                    <div class="key default" data-key="'">'</div>
-                    <div class="key enter default" data-key="Enter">Enter</div>
-                </div>
-
-                <!-- 第三排字母 -->
-                <div class="row">
-                    <div class="key shift-left default" data-key="ShiftLeft">Shift</div>
-                    <div class="key default" data-key="z">Z</div>
-                    <div class="key default" data-key="x">X</div>
-                    <div class="key default" data-key="c">C</div>
-                    <div class="key default" data-key="v">V</div>
-                    <div class="key default" data-key="b">B</div>
-                    <div class="key default" data-key="n">N</div>
-                    <div class="key default" data-key="m">M</div>
-                    <div class="key default" data-key="Comma">,</div>
-                    <div class="key default" data-key=".">.</div>
-                    <div class="key default" data-key="/">/</div>
-                    <div class="key shift-right default" data-key="ShiftRight">Shift</div>
-                </div>
-
-                <!-- 最底排 -->
-                <div class="row">
-                    <div class="key ctrl default" data-key="ControlLeft">Ctrl</div>
-                    <div class="key default" data-key="MetaLeft">Win</div>
-                    <div class="key alt default" data-key="AltLeft">Alt</div>
-                    <div class="key space default" data-key="Space">Space</div>
-                    <div class="key alt default" data-key="AltRight">Alt</div>
-                    <div class="key default" data-key="MetaRight">Win</div>
-                    <div class="key default" data-key="ContextMenu">Menu</div>
-                    <div class="key ctrl default" data-key="ControlRight">Ctrl</div>
-                </div>
-            </div>
-
-            <div class="right-section">
-                <div class="nav-arrow-section">
-                    <!-- 導航鍵群組 -->
-                    <div class="nav-cluster">
-                        <div class="key default" data-key="Insert">Insert</div>
-                        <div class="key default" data-key="Home">Home</div>
-                        <div class="key default" data-key="PageUp">PgUp</div>
-                        <div class="key default" data-key="Delete">Delete</div>
-                        <div class="key default" data-key="End">End</div>
-                        <div class="key default" data-key="PageDown">PgDn</div>
-                    </div>
-
-                    <!-- 方向鍵 -->
-                    <div class="arrow-cluster">
-                        <div class="key arrow-up default" data-key="ArrowUp">↑</div>
-                        <div class="key arrow-left default" data-key="ArrowLeft">←</div>
-                        <div class="key arrow-down default" data-key="ArrowDown">↓</div>
-                        <div class="key arrow-right default" data-key="ArrowRight">→</div>
+        <div class="keyboard-scroll-container">
+            <div class="keyboard">
+                <!-- 功能鍵區 -->
+                <div class="function-keys">
+                    <div class="row">
+                        <div class="key default" data-key="Escape">Esc</div>
+                        <div style="width: 50px;"></div>
+                        <div class="key default" data-key="F1">F1</div>
+                        <div class="key default" data-key="F2">F2</div>
+                        <div class="key default" data-key="F3">F3</div>
+                        <div class="key default" data-key="F4">F4</div>
+                        <div style="width: 25px;"></div>
+                        <div class="key default" data-key="F5">F5</div>
+                        <div class="key default" data-key="F6">F6</div>
+                        <div class="key default" data-key="F7">F7</div>
+                        <div class="key default" data-key="F8">F8</div>
+                        <div style="width: 25px;"></div>
+                        <div class="key default" data-key="F9">F9</div>
+                        <div class="key default" data-key="F10">F10</div>
+                        <div class="key default" data-key="F11">F11</div>
+                        <div class="key default" data-key="F12">F12</div>
+                        <div style="width: 10px;"></div>
+                        <div class="key default" data-key="PrintScreen">PrtSc</div>
+                        <div class="key default" data-key="ScrollLock">ScrLk</div>
+                        <div class="key default" data-key="Pause">Pause</div>
                     </div>
                 </div>
 
-                <!-- 數字鍵盤 -->
-                <div class="numpad-grid">
-                    <div class="key default" data-key="NumLock">Num</div>
-                    <div class="key default" data-key="NumpadDivide">÷</div>
-                    <div class="key default" data-key="NumpadMultiply">×</div>
-                    <div class="key default" data-key="NumpadSubtract">-</div>
-                    <div class="key default" data-key="Numpad7">7</div>
-                    <div class="key default" data-key="Numpad8">8</div>
-                    <div class="key default" data-key="Numpad9">9</div>
-                    <div class="key numpad-plus default" data-key="NumpadAdd">+</div>
-                    <div class="key default" data-key="Numpad4">4</div>
-                    <div class="key default" data-key="Numpad5">5</div>
-                    <div class="key default" data-key="Numpad6">6</div>
-                    <div class="key default" data-key="Numpad1">1</div>
-                    <div class="key default" data-key="Numpad2">2</div>
-                    <div class="key default" data-key="Numpad3">3</div>
-                    <div class="key numpad-enter default" data-key="NumpadEnter">Enter</div>
-                    <div class="key numpad-0 default" data-key="Numpad0">0</div>
-                    <div class="key default" data-key="NumpadDecimal">.</div>
+                <div class="main-keyboard">
+                    <div class="left-section">
+                        <!-- 數字列 -->
+                        <div class="row">
+                            <div class="key default" data-key="`">~</div>
+                            <div class="key default" data-key="1">1</div>
+                            <div class="key default" data-key="2">2</div>
+                            <div class="key default" data-key="3">3</div>
+                            <div class="key default" data-key="4">4</div>
+                            <div class="key default" data-key="5">5</div>
+                            <div class="key default" data-key="6">6</div>
+                            <div class="key default" data-key="7">7</div>
+                            <div class="key default" data-key="8">8</div>
+                            <div class="key default" data-key="9">9</div>
+                            <div class="key default" data-key="0">0</div>
+                            <div class="key default" data-key="-">-</div>
+                            <div class="key default" data-key="=">=</div>
+                            <div class="key backspace default" data-key="Backspace">Backspace</div>
+                        </div>
+
+                        <!-- 第一排字母 -->
+                        <div class="row">
+                            <div class="key tab default" data-key="Tab">Tab</div>
+                            <div class="key default" data-key="q">Q</div>
+                            <div class="key default" data-key="w">W</div>
+                            <div class="key default" data-key="e">E</div>
+                            <div class="key default" data-key="r">R</div>
+                            <div class="key default" data-key="t">T</div>
+                            <div class="key default" data-key="y">Y</div>
+                            <div class="key default" data-key="u">U</div>
+                            <div class="key default" data-key="i">I</div>
+                            <div class="key default" data-key="o">O</div>
+                            <div class="key default" data-key="p">P</div>
+                            <div class="key default" data-key="[">[</div>
+                            <div class="key default" data-key="]">]</div>
+                            <div class="key backslash default" data-key="\\">\\</div>
+                        </div>
+
+                        <!-- 第二排字母 -->
+                        <div class="row">
+                            <div class="key caps default" data-key="CapsLock">Caps Lock</div>
+                            <div class="key default" data-key="a">A</div>
+                            <div class="key default" data-key="s">S</div>
+                            <div class="key default" data-key="d">D</div>
+                            <div class="key default" data-key="f">F</div>
+                            <div class="key default" data-key="g">G</div>
+                            <div class="key default" data-key="h">H</div>
+                            <div class="key default" data-key="j">J</div>
+                            <div class="key default" data-key="k">K</div>
+                            <div class="key default" data-key="l">L</div>
+                            <div class="key default" data-key=";">;</div>
+                            <div class="key default" data-key="'">'</div>
+                            <div class="key enter default" data-key="Enter">Enter</div>
+                        </div>
+
+                        <!-- 第三排字母 -->
+                        <div class="row">
+                            <div class="key shift-left default" data-key="ShiftLeft">Shift</div>
+                            <div class="key default" data-key="z">Z</div>
+                            <div class="key default" data-key="x">X</div>
+                            <div class="key default" data-key="c">C</div>
+                            <div class="key default" data-key="v">V</div>
+                            <div class="key default" data-key="b">B</div>
+                            <div class="key default" data-key="n">N</div>
+                            <div class="key default" data-key="m">M</div>
+                            <div class="key default" data-key="Comma">,</div>
+                            <div class="key default" data-key=".">.</div>
+                            <div class="key default" data-key="/">/</div>
+                            <div class="key shift-right default" data-key="ShiftRight">Shift</div>
+                        </div>
+
+                        <!-- 最底排 -->
+                        <div class="row">
+                            <div class="key ctrl default" data-key="ControlLeft">Ctrl</div>
+                            <div class="key default" data-key="MetaLeft">Win</div>
+                            <div class="key alt default" data-key="AltLeft">Alt</div>
+                            <div class="key space default" data-key="Space">Space</div>
+                            <div class="key alt default" data-key="AltRight">Alt</div>
+                            <div class="key default" data-key="MetaRight">Win</div>
+                            <div class="key default" data-key="ContextMenu">Menu</div>
+                            <div class="key ctrl default" data-key="ControlRight">Ctrl</div>
+                        </div>
+                    </div>
+
+                    <div class="right-section">
+                        <div class="nav-arrow-section">
+                            <!-- 導航鍵群組 -->
+                            <div class="nav-cluster">
+                                <div class="key default" data-key="Insert">Insert</div>
+                                <div class="key default" data-key="Home">Home</div>
+                                <div class="key default" data-key="PageUp">PgUp</div>
+                                <div class="key default" data-key="Delete">Delete</div>
+                                <div class="key default" data-key="End">End</div>
+                                <div class="key default" data-key="PageDown">PgDn</div>
+                            </div>
+
+                            <!-- 方向鍵 -->
+                            <div class="arrow-cluster">
+                                <div class="key arrow-up default" data-key="ArrowUp">↑</div>
+                                <div class="key arrow-left default" data-key="ArrowLeft">←</div>
+                                <div class="key arrow-down default" data-key="ArrowDown">↓</div>
+                                <div class="key arrow-right default" data-key="ArrowRight">→</div>
+                            </div>
+                        </div>
+
+                        <!-- 數字鍵盤 -->
+                        <div class="numpad-grid">
+                            <div class="key default" data-key="NumLock">Num</div>
+                            <div class="key default" data-key="NumpadDivide">÷</div>
+                            <div class="key default" data-key="NumpadMultiply">×</div>
+                            <div class="key default" data-key="NumpadSubtract">-</div>
+                            <div class="key default" data-key="Numpad7">7</div>
+                            <div class="key default" data-key="Numpad8">8</div>
+                            <div class="key default" data-key="Numpad9">9</div>
+                            <div class="key numpad-plus default" data-key="NumpadAdd">+</div>
+                            <div class="key default" data-key="Numpad4">4</div>
+                            <div class="key default" data-key="Numpad5">5</div>
+                            <div class="key default" data-key="Numpad6">6</div>
+                            <div class="key default" data-key="Numpad1">1</div>
+                            <div class="key default" data-key="Numpad2">2</div>
+                            <div class="key default" data-key="Numpad3">3</div>
+                            <div class="key numpad-enter default" data-key="NumpadEnter">Enter</div>
+                            <div class="key numpad-0 default" data-key="Numpad0">0</div>
+                            <div class="key default" data-key="NumpadDecimal">.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -644,6 +704,19 @@
     <div class="tooltip" id="tooltip"></div>
 
     <script>
+        function checkOrientation() {
+            const notice = document.getElementById('rotateNotice');
+            if (window.innerHeight > window.innerWidth) {
+                notice.style.display = 'flex'; // 直立模式顯示
+            } else {
+                notice.style.display = 'none'; // 橫向隱藏
+            }
+        }
+        
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        checkOrientation();
+
         class ConfigurableKeyboard {
             constructor() {
                 this.keys = document.querySelectorAll('.key');
@@ -677,7 +750,7 @@
 
                 this.loadMinecraftConfig();
                 
-                // 初始化搜尋功能（需要在載入配置後執行）
+                // 初始化搜尋
                 this.initSearch();
             }
 
@@ -797,7 +870,7 @@ F12,開關挖掘冷卻,mod,Tweakeroo
 PrintScreen,截圖(Windows自帶),default
 ScrollLock,未使用,default
 Pause,未使用,default
-\`,偽潛行,mod,Tweakeroo
+\`,假潛行,mod,Tweakeroo
 1,快捷欄1,default
 2,快捷欄2,default
 3,快捷欄3,default
@@ -1025,3 +1098,5 @@ NumpadDecimal,投影打印機開關,mod,Litematica`;
         });
     </script>
 </body>
+</html>
+                
