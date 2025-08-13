@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Sparkle 模組包預設鍵位一覽表</title>
     <style>
         * {
@@ -424,7 +424,35 @@
             <h1>Sparkle 模組包預設鍵位一覽表</h1>
             <p>將滑鼠移動到按鍵上查看功能對應</p>
         </div>
-     
+        
+        <div id="rotateNotice" style="
+            display:none;
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.85);
+            color:white;
+            font-size:18px;
+            z-index:9999;
+            text-align:center;
+            padding-top:40%;
+        ">
+            📱 請將裝置橫過來以正常顯示鍵盤
+        </div>
+        <script>
+        function checkOrientation() {
+            const notice = document.getElementById('rotateNotice');
+            if (window.innerHeight > window.innerWidth) {
+                notice.style.display = 'block'; // 直立模式顯示
+            } else {
+                notice.style.display = 'none'; // 橫向隱藏
+            }
+        }
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        checkOrientation();
+        </script>
+
+
         <!-- 功能鍵區 -->
         <div class="function-keys">
             <div class="row">
